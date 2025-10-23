@@ -32,6 +32,35 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        
+        /* ★★★ 新規追加: 色選択エリアのスタイル ★★★ */
+        #color-selection {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        #color-selection > div {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        #color-selection label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        #color-selection input[type="color"] {
+            width: 40px;
+            height: 25px;
+            padding: 0;
+            border: 1px solid #aaa;
+            cursor: pointer;
+        }
+        /* ★★★ ここまで ★★★ */
+
         #generateBtn {
             font-size: 16px;
             padding: 10px 20px;
@@ -49,7 +78,7 @@
             cursor: not-allowed;
         }
 
-        /* --- ★★★ ここから下は「PDFプレビュー欄」のCSS ★★★ --- */
+        /* --- PDFプレビュー欄のCSS --- */
         h2.preview-title {
             margin-top: 40px;
             border-bottom: 2px solid #ccc;
@@ -60,12 +89,11 @@
             border: 1px solid #ccc;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 700px; /* プレビューの最大幅 */
+            max-width: 700px; 
             margin: 20px auto;
-            aspect-ratio: 297 / 210; /* A4横の比率を保つ */
+            aspect-ratio: 297 / 210; 
             
-            /* 中身のレイアウト (pdf-pageと同じ) */
-            padding: 15px; /* プレビュー用の余白 */
+            padding: 15px; 
             box-sizing: border-box; 
             color: #000;
             display: flex;
@@ -79,7 +107,7 @@
             margin-top: 0;
             margin-bottom: 10px;
             flex-shrink: 0;
-            font-size: 18px; /* プレビュー用の文字サイズ */
+            font-size: 18px; 
         }
         /* プレビューの表 */
         #preview-area #pdf-table-wrapper {
@@ -88,7 +116,7 @@
             flex-grow: 1;
             border: 2px solid #000;
             box-sizing: border-box;
-            overflow: hidden; /* ★はみ出し防止 */
+            overflow: hidden; 
         }
         /* プレビューの左右カラム */
         #preview-area #pdf-left-column, 
@@ -106,10 +134,10 @@
             text-align: center;
             background-color: #f0f0f0;
             border-bottom: 1px solid #000;
-            padding: 4px 0; /* プレビュー用の余白 */
+            padding: 4px 0; 
             margin: 0;
             flex-shrink: 0;
-            font-size: 16px; /* プレビュー用の文字サイズ */
+            font-size: 16px; 
         }
         /* プレビューのリスト */
         #preview-area ol {
@@ -124,22 +152,22 @@
         /* プレビューの各行 */
         #preview-area li {
             padding: 0 10px;
-            font-size: 14px; /* プレビュー用の文字サイズ */
+            font-size: 14px; 
             border-bottom: 1px solid #ccc;
             flex-grow: 1; 
             display: flex;
             align-items: center;
             box-sizing: border-box;
-            /* ★文字がはみ出た場合に省略記号(...)を出す */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            /* ★プレビューリストは色をインラインスタイルで設定するため、ここでのcolor設定は削除 */
         }
         #preview-area li:last-child {
             border-bottom: none;
         }
 
-        /* --- ★★★ ここから下は「PDF生成用（非表示）」のCSS (変更なし) ★★★ --- */
+        /* --- PDF生成用（非表示）のCSS (変更なし) --- */
         #pdf-page {
             position: absolute;
             left: -10000px;
@@ -160,7 +188,7 @@
             margin-top: 0;
             margin-bottom: 10px; 
             flex-shrink: 0;
-            font-size: 18px; /* (ここは元のサイズ) */
+            font-size: 18px; 
         }
         #pdf-page #pdf-table-wrapper {
             display: flex; 
@@ -204,6 +232,7 @@
             display: flex;
             align-items: center; 
             box-sizing: border-box;
+            /* ★PDF生成リストは色をインラインスタイルで設定するため、ここでのcolor設定は削除 */
         }
         #pdf-page li:last-child {
             border-bottom: none;
@@ -215,8 +244,18 @@
     <h1>単語帳 PDFメーカー</h1>
     <p>英単語と日本語訳を10セット入力し、「PDFを作成」ボタンを押してください。</p>
 
-    <div id="input-area">
+    <div id="color-selection">
+        <div>
+            <label for="color-eng">英単語の色:</label>
+            <input type="color" id="color-eng" value="#000000"> 
         </div>
+        <div>
+            <label for="color-jpn">日本語訳の色:</label>
+            <input type="color" id="color-jpn" value="#ff0000"> 
+        </div>
+    </div>
+    <div id="input-area">
+    </div>
 
     <button id="generateBtn">PDFを作成</button>
     
