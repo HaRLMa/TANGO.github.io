@@ -3,38 +3,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const inputArea = document.getElementById('input-area');
     const generateBtn = document.getElementById('generateBtn');
-
-    // ★プレビュー用のリストを取得
+    
+    // ★★★ 新規追加: 色選択要素を取得 ★★★
+    const colorEngInput = document.getElementById('color-eng');
+    const colorJpnInput = document.getElementById('color-jpn');
+    
+    // プレビュー用のリストを取得
     const previewEngList = document.getElementById('preview-list-eng');
     const previewJpnList = document.getElementById('preview-list-jpn');
     
-    // ★PDF生成用のリストを取得
+    // PDF生成用のリストを取得
     const pdfEngList = document.getElementById('word-list-eng');
     const pdfJpnList = document.getElementById('word-list-jpn');
 
-    // ★★★ プレビューを更新する関数 (新設) ★★★
+    // ★★★ プレビューを更新する関数 (色適用ロジックを追加) ★★★
     function updatePreview() {
         // 入力値を取得
         const engInputs = document.querySelectorAll('.eng');
         const jpnInputs = document.querySelectorAll('.jpn');
+        
+        // ★★★ 選択された色を取得 ★★★
+        const engColor = colorEngInput.value;
+        const jpnColor = colorJpnInput.value;
 
         // プレビューのリストを一度空にする
         previewEngList.innerHTML = '';
         previewJpnList.innerHTML = '';
 
         for (let i = 0; i < 10; i++) {
-            // (未入力) の処理はプレビューでも行う
             const eng = engInputs[i].value || '(未入力)';
             const jpn = jpnInputs[i].value || '(未入力)';
 
             // プレビューの英単語リストに行(li)を追加
             const liEng = document.createElement('li');
             liEng.textContent = eng;
+            // ★色をインラインスタイルで適用
+            liEng.style.color = engColor; 
             previewEngList.appendChild(liEng);
             
             // プレビューの日本語訳リストに行(li)を追加
             const liJpn = document.createElement('li');
             liJpn.textContent = jpn;
+            // ★色をインラインスタイルで適用
+            liJpn.style.color = jpnColor; 
             previewJpnList.appendChild(liJpn);
         }
     }
@@ -51,12 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
         inputArea.appendChild(div);
     }
 
-    // ★★★ すべての入力欄に「文字が入力されたらプレビューを更新する」イベントを追加 ★★★
+    // ★★★ すべての入力欄と色選択欄に「変更されたらプレビューを更新する」イベントを追加 ★★★
     const allInputs = document.querySelectorAll('.eng, .jpn');
     allInputs.forEach(input => {
         // 'input' イベントは、キーをタイプするたびに発生する
         input.addEventListener('input', updatePreview);
     });
+    // ★色選択欄にもイベントを追加
+    colorEngInput.addEventListener('input', updatePreview);
+    colorJpnInput.addEventListener('input', updatePreview);
 
     // ★★★ ページ読み込み時にも一度、プレビューを初期化する ★★★
     updatePreview();
@@ -68,12 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
         generateBtn.disabled = true;
         generateBtn.textContent = 'PDFを作成中...';
 
-        // --- 2-1. 入力された値を取得 (変更なし) ---
+        // --- 2-1. 入力された値を取得 ---
         const engInputs = document.querySelectorAll('.eng');
         const jpnInputs = document.querySelectorAll('.jpn');
         
-        // --- 2-2. ★PDF化する「非表示の」リストを生成・更新する (★重要) ---
-        // ※プレビュー(previewList) ではなく、PDF用の(pdfList)を更新する
+        // ★★★ 選択された色を再度取得 (PDF生成用) ★★★
+        const engColor = colorEngInput.value;
+        const jpnColor = colorJpnInput.value;
+        
+        // --- 2-2. PDF化する「非表示の」リストを生成・更新する (★色適用ロジックを追加) ---
         pdfEngList.innerHTML = ''; 
         pdfJpnList.innerHTML = ''; 
 
@@ -83,11 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const liEng = document.createElement('li');
             liEng.textContent = eng;
-            pdfEngList.appendChild(liEng); // ★pdfEngList に追加
+            // ★PDF生成リストにも色をインラインスタイルで適用
+            liEng.style.color = engColor; 
+            pdfEngList.appendChild(liEng); 
             
             const liJpn = document.createElement('li');
             liJpn.textContent = jpn;
-            pdfJpnList.appendChild(liJpn); // ★pdfJpnList に追加
+            // ★PDF生成リストにも色をインラインスタイルで適用
+            liJpn.style.color = jpnColor; 
+            pdfJpnList.appendChild(liJpn); 
         }
 
         // --- 2-3. PDFの作成処理 (変更なし) ---
@@ -97,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
                 const { jsPDF } = window.jspdf;
                 const canvasGenerator = window.html2canvas;
-                // ★対象は #pdf-page (非表示のPDFテンプレート) のまま
+                // 対象は #pdf-page (非表示のPDFテンプレート) のまま
                 const elementToCapture = document.getElementById('pdf-page');
 
                 canvasGenerator(elementToCapture, {
