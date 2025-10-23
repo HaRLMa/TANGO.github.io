@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         previewJpnList.innerHTML = '';
 
         for (let i = 0; i < 10; i++) {
-            const eng = engInputs[i].value || '(未入力)';
-            const jpn = jpnInputs[i].value || '(未入力)';
+            const eng = engInputs[i].value || '';
+            const jpn = jpnInputs[i].value || '';
 
             // プレビューの英単語リストに行(li)を追加
             const liEng = document.createElement('li');
